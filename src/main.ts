@@ -1,13 +1,11 @@
 import Vue from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
 import router from "./router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faExclamation,
-  faFont,
-  faRedoAlt,
-  faTextHeight
+    faExclamation,
+    faFont,
+    faRedoAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +19,6 @@ Vue.component("Typing", Typing);
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    render: h => h(App)
 }).$mount("#app");

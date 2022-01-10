@@ -92,7 +92,7 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { WordList, ErrorsDict, WordStatus, WORDS, RTL } from "../views/models";
+import { WordList, ErrorsDict, WordStatus } from "../views/models";
 import { checkSubWord, addError } from "../views/utils";
 
 @Component
@@ -119,196 +119,195 @@ export default class Typing extends Vue {
   private wordRef: any;
   private firstError: boolean = true;
   private tempMessage: string = "";
-  private RTL = RTL;
   scores: string[];
   customText: string = "";
   customOpen: boolean = false;
   constructor() {
-    super();
+      super();
   }
 
   created() {
-    if (!this.errorsDict.length) {
-      this.errorsDict = JSON.parse(
-        localStorage.getItem("errorsAnalysis") || "[]"
+      if (!this.errorsDict.length) {
+          this.errorsDict = JSON.parse(
+              localStorage.getItem("errorsAnalysis") || "[]"
+          );
+      }
+      const scoreHistory = JSON.parse(
+          localStorage.getItem("scoreHistory") || "[]"
       );
-    }
-    const scoreHistory = JSON.parse(
-      localStorage.getItem("scoreHistory") || "[]"
-    );
-    this.scores = scoreHistory.reverse();
-    this.wordRef = this.$refs.words;
+      this.scores = scoreHistory.reverse();
+      this.wordRef = this.$refs.words;
   }
 
   mounted() {
-    const typeInput = this.$refs.typeInput as HTMLElement;
-    typeInput.focus();
-    this.wordRef = this.$refs.words;
+      const typeInput = this.$refs.typeInput as HTMLElement;
+      typeInput.focus();
+      this.wordRef = this.$refs.words;
   }
 
   saveCustomText() {
-    this.customText = this.customText.trim();
-    const wordCount = this.customText.split(" ");
-    console.log("w", wordCount);
-    if (wordCount.length > 120) {
-      localStorage.setItem("customText", this.customText);
-    } else {
-      alert(
-        `You need to insert at least 120 words and you have entered ${wordCount.length}`
-      );
-    }
+      this.customText = this.customText.trim();
+      const wordCount = this.customText.split(" ");
+      console.log("w", wordCount);
+      if (wordCount.length > 120) {
+          localStorage.setItem("customText", this.customText);
+      } else {
+          alert(
+              `You need to insert at least 120 words and you have entered ${wordCount.length}`
+          );
+      }
   }
   typing() {
-    this.startTimer();
-    this.letterInWord = this.message.length - 1;
-    this.currentWord = this.wordList[this.wordCount].text;
-    if (!this.message.trim().length) {
-      this.message = "";
-      return;
-    }
+      this.startTimer();
+      this.letterInWord = this.message.length - 1;
+      this.currentWord = this.wordList[this.wordCount].text;
+      if (!this.message.trim().length) {
+          this.message = "";
+          return;
+      }
 
-    if (!checkSubWord(this.message, this.currentWord)) {
-      this.wordList[this.wordCount].status = WordStatus.error;
-      this.handelError();
-    } else {
-      this.wordList[this.wordCount].status = WordStatus.void;
-      this.firstError = true;
-    }
+      if (!checkSubWord(this.message, this.currentWord)) {
+          this.wordList[this.wordCount].status = WordStatus.error;
+          this.handelError();
+      } else {
+          this.wordList[this.wordCount].status = WordStatus.void;
+          this.firstError = true;
+      }
 
-    //check if removing
-    if (this.tempMessage.length > this.message.length) {
+      //check if removing
+      if (this.tempMessage.length > this.message.length) {
+          this.tempMessage = this.message;
+          return;
+      }
       this.tempMessage = this.message;
-      return;
-    }
-    this.tempMessage = this.message;
-    if (this.message.endsWith(" ")) {
-      this._moveToNextWord(this.currentWord);
-    }
-
-    this.$nextTick(() => {
-      const currentWordTop: number = this.wordRef[
-        this.wordCount
-      ].getBoundingClientRect().top;
-      if (this.runOnlyOnce) {
-        this.runOnlyOnce = false;
-        this.tmpTop = currentWordTop;
+      if (this.message.endsWith(" ")) {
+          this._moveToNextWord(this.currentWord);
       }
 
-      if (this.tmpTop != currentWordTop) {
-        this.currentTop += this.tmpTop - currentWordTop;
-        this.wordListStyles.top = this.currentTop + "px";
-      }
-    });
+      this.$nextTick(() => {
+          const currentWordTop: number = this.wordRef[
+              this.wordCount
+          ].getBoundingClientRect().top;
+          if (this.runOnlyOnce) {
+              this.runOnlyOnce = false;
+              this.tmpTop = currentWordTop;
+          }
+
+          if (this.tmpTop != currentWordTop) {
+              this.currentTop += this.tmpTop - currentWordTop;
+              this.wordListStyles.top = this.currentTop + "px";
+          }
+      });
   }
 
   _moveToNextWord(currentRightWord: string) {
-    if (this.message.trim() == currentRightWord) {
-      this.wordList[this.wordCount].status = WordStatus.success;
-      this.successWords += 1;
-      this.successWordsText += this.message;
-    } else {
-      this.wordList[this.wordCount].status = WordStatus.error;
-      this.errrorWords += 1;
-      this.handelError();
-    }
-    this.allText += this.message;
-    this.message = "";
-    this.wordList[this.wordCount].isActive = false;
-    this.wordCount++;
-    if (this.wordList.length > this.wordCount) {
-      this.wordList[this.wordCount].isActive = true;
-    } else {
-      console.log("good game");
-    }
-    this.firstError = true;
+      if (this.message.trim() == currentRightWord) {
+          this.wordList[this.wordCount].status = WordStatus.success;
+          this.successWords += 1;
+          this.successWordsText += this.message;
+      } else {
+          this.wordList[this.wordCount].status = WordStatus.error;
+          this.errrorWords += 1;
+          this.handelError();
+      }
+      this.allText += this.message;
+      this.message = "";
+      this.wordList[this.wordCount].isActive = false;
+      this.wordCount++;
+      if (this.wordList.length > this.wordCount) {
+          this.wordList[this.wordCount].isActive = true;
+      } else {
+          console.log("good game");
+      }
+      this.firstError = true;
   }
 
   handelError() {
-    if (this.firstError) {
-      addError(
-        this.errorsDict,
-        this.currentWord[this.letterInWord] || "",
-        this.message[this.letterInWord]
-      );
-      localStorage.setItem("errorsAnalysis", JSON.stringify(this.errorsDict));
-      this.firstError = false;
-    }
-    // console.log(this.errorsDict);
+      if (this.firstError) {
+          addError(
+              this.errorsDict,
+              this.currentWord[this.letterInWord] || "",
+              this.message[this.letterInWord]
+          );
+          localStorage.setItem("errorsAnalysis", JSON.stringify(this.errorsDict));
+          this.firstError = false;
+      }
+      // console.log(this.errorsDict);
   }
 
   startTimer() {
-    if (!this.running) {
-      this.timer = setInterval(() => this.countdown(), 1000);
-    }
-    this.running = true;
+      if (!this.running) {
+          this.timer = setInterval(() => this.countdown(), 1000);
+      }
+      this.running = true;
   }
 
   countdown() {
-    this.totalTime--;
-    if (this.totalTime == 0) {
-      this.gameOver();
-    }
+      this.totalTime--;
+      if (this.totalTime == 0) {
+          this.gameOver();
+      }
   }
 
   gameOver() {
-    this.errorsList = this.errorsDict.map(error =>
-      ErrorsDict.getMostMistakes(error)
-    );
-    this.errorsList.sort((e1, e2) => e2.errors - e1.errors);
+      this.errorsList = this.errorsDict.map(error =>
+          ErrorsDict.getMostMistakes(error)
+      );
+      this.errorsList.sort((e1, e2) => e2.errors - e1.errors);
 
-    this.running = false;
-    console.log("good game", this.successWords, this.errrorWords);
-    this._clearTimer();
-    const wpm = this.successWordsText.length / 4;
-    alert(wpm);
-    this.scores.push(String(wpm));
+      this.running = false;
+      console.log("good game", this.successWords, this.errrorWords);
+      this._clearTimer();
+      const wpm = this.successWordsText.length / 4;
+      alert(wpm);
+      this.scores.push(String(wpm));
 
-    const scoreHistory = JSON.parse(
-      localStorage.getItem("scoreHistory") || "[]"
-    );
-    scoreHistory.push(wpm);
-    localStorage.setItem("scoreHistory", JSON.stringify(scoreHistory));
+      const scoreHistory = JSON.parse(
+          localStorage.getItem("scoreHistory") || "[]"
+      );
+      scoreHistory.push(wpm);
+      localStorage.setItem("scoreHistory", JSON.stringify(scoreHistory));
   }
   toggleCustom() {
-    this.customOpen = !this.customOpen;
+      this.customOpen = !this.customOpen;
   }
   restartErrorDict() {
-    this.errorsList = [];
-    this.errorsDict = [];
-    localStorage.setItem("errorsAnalysis", JSON.stringify(this.errorsDict));
+      this.errorsList = [];
+      this.errorsDict = [];
+      localStorage.setItem("errorsAnalysis", JSON.stringify(this.errorsDict));
   }
   restart() {
-    this.$emit("restart");
-    this._clearVaribeles();
-    // const typeInput = this.$refs.typeInput as HTMLElement;
-    // typeInput.focus();
+      this.$emit("restart");
+      this._clearVaribeles();
+      // const typeInput = this.$refs.typeInput as HTMLElement;
+      // typeInput.focus();
   }
 
   caseSensitiveToggle() {
-    this.$emit("caseSensitiveToggle");
+      this.$emit("caseSensitiveToggle");
   }
 
   SpecialCharsToggle() {
-    this.$emit("SpecialCharsToggle");
+      this.$emit("SpecialCharsToggle");
   }
 
   _clearVaribeles() {
-    this.successWords = 0;
-    this.errrorWords = 0;
-    this.wordCount = 0;
-    this.running = false;
-    this.message = "";
-    this.allText = "";
-    this.tmpTop = 0;
-    this.currentTop = 0;
-    this.wordListStyles.top = "0px";
-    this._clearTimer();
-    this.running = true; // to recreate the list
+      this.successWords = 0;
+      this.errrorWords = 0;
+      this.wordCount = 0;
+      this.running = false;
+      this.message = "";
+      this.allText = "";
+      this.tmpTop = 0;
+      this.currentTop = 0;
+      this.wordListStyles.top = "0px";
+      this._clearTimer();
+      this.running = true; // to recreate the list
   }
 
   _clearTimer() {
-    this.totalTime = 60;
-    clearInterval(this.timer);
+      this.totalTime = 60;
+      clearInterval(this.timer);
   }
 }
 </script>
