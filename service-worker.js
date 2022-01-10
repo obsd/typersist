@@ -14,15 +14,15 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-    "/typeresist/precache-manifest.35f80951c436b786b6ac4547db43710f.js"
+  "/typersist/precache-manifest.0a973b5d44becca83dae68eeb10ef046.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "typersistence"});
 
 self.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 /**
