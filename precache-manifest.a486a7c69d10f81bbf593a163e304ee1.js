@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0eb848e42732c40cfe81",
-    "url": "/typersist/css/about.89b1d103.css"
+    "revision": "3082058b0bf019bad8f6",
+    "url": "/typersist/css/about.8a897157.css"
   },
   {
-    "revision": "b6788baa56e0f682deb5",
-    "url": "/typersist/css/app.f2b5f3de.css"
+    "revision": "e3d2407050b59d75e01f",
+    "url": "/typersist/css/app.051037de.css"
   },
   {
-    "revision": "130d5ca222c36bc32c724007760cfe6e",
+    "revision": "8e60561de898c07134f0d755b4bcabea",
     "url": "/typersist/index.html"
   },
   {
-    "revision": "0eb848e42732c40cfe81",
-    "url": "/typersist/js/about.63a7f120.js"
+    "revision": "3082058b0bf019bad8f6",
+    "url": "/typersist/js/about.f0b01681.js"
   },
   {
-    "revision": "b6788baa56e0f682deb5",
-    "url": "/typersist/js/app.f6729976.js"
+    "revision": "e3d2407050b59d75e01f",
+    "url": "/typersist/js/app.b9af291b.js"
   },
   {
     "revision": "5bcc3d239f1378030278",

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/typersist/precache-manifest.0a973b5d44becca83dae68eeb10ef046.js"
+  "/typersist/precache-manifest.a486a7c69d10f81bbf593a163e304ee1.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "typersistence"});
